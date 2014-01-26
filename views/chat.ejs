@@ -1,5 +1,6 @@
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
+<canvas width="300" height="300" id="can"></canvas>
 
 // connect to server
 var socket = io.connect();
@@ -51,5 +52,4 @@ function message(name,msg){
 <input type="text" id="message" value="">
 <input type="button" value="send" onclick="SendMsg()">
 <input type="button" value="disconect" onclick="DisConnect()">
-<canvas width="300" height="300" id="can"></canvas>
 <div id="receiveMsg"></div>
