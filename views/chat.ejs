@@ -1,23 +1,12 @@
-<canvas width="300" height="300" id="can"></canvas>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 
 // connect to server
 var socket = io.connect();
-var can , ctx;
 
 // when connected
 socket.on( 'connect', function(msg) {
 	document.getElementById( "connectId" ).innerHTML = "your ID::" + socket.socket.sessionid;
-	can = document.getElementById('can');
-	ctx = can.getContext('2d');	
-	ctx.beginPath();
-	ctx.moveTo(0,0);
-	ctx.lineTo(299,0);
-	ctx.lineTo(299,299);
-	ctx.lineTo(0,299);
-	ctx.closePath();
-	ctx.stroke();
 });
 
 // when receive a message
