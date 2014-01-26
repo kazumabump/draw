@@ -11,7 +11,7 @@ socket.on( 'connect', function(msg) {
 
 // when receive a message
 socket.on( 'message', function(msg) {
-	document.getElementById( "receiveMsg" ).appendChild( document.createTextNode( msg.name  ) );
+	document.getElementById( "receiveMsg" ).appendChild( document.createTextNode( msg.name + ":") );
 	document.getElementById( "receiveMsg" ).appendChild( document.createTextNode( msg.msg  ) );
 	document.getElementById( "receiveMsg" ).appendChild( document.createElement( "br" ) );
 });
