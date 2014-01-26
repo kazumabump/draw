@@ -12,5 +12,5 @@ exports.chat = function(req, res){
 };
 
 exports.drawing = function(req, res){
-  res.render('drawing', { title: 'PictChat by socket.io' })
+  res.render('drawing', { title: 'PictChat aaa by socket.io' })
 };

@@ -34,7 +34,7 @@ app.get( '/chat', routes.chat );
 app.get( '/drawing', routes.drawing );
 
 app.listen(process.env.OPENSHIFT_NODEJS_PORT || 8000, process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1', function(){
-  console.log("Express aaa server listening on port %d in %s mode", app.address().port, app.settings.env);
+  console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 });
 
 //socket
