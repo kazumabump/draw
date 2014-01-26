@@ -3,10 +3,20 @@
 
 // connect to server
 var socket = io.connect();
+var can , ctx;
 
 // when connected
 socket.on( 'connect', function(msg) {
 	document.getElementById( "connectId" ).innerHTML = "your ID::" + socket.socket.sessionid;
+	can = document.getElementById('can');
+	ctx = can.getContext('2d');	
+	ctx.beginPath();
+	ctx.moveTo(0,0);
+	ctx.lineTo(299,0);
+	ctx.lineTo(299,299);
+	ctx.lineTo(0,299);
+	ctx.closePath();
+	ctx.stroke();
 });
 
 // when receive a message
@@ -41,5 +51,5 @@ function message(name,msg){
 <input type="text" id="message" value="">
 <input type="button" value="send" onclick="SendMsg()">
 <input type="button" value="disconect" onclick="DisConnect()">
-<canvas width="640" height="480" id="can"></canvas>
+<canvas width="300" height="300" id="can"></canvas>
 <div id="receiveMsg"></div>
