@@ -11,14 +11,14 @@ socket.on( 'connect', function(msg) {
 
 // when receive a message
 socket.on( 'message', function(msg) {
-	document.getElementById( "receiveMsg" ).appendChild( document.createTextNode( msg  ) );
+	document.getElementById( "receiveMsg" ).appendChild( document.createTextNode( msg.msg  ) );
 	document.getElementById( "receiveMsg" ).appendChild( document.createElement( "br" ) );
 });
 
 // message sending
 function SendMsg() {
-	var msg = document.getElementById( "message" ).value;
-console.log( msg );
+	var msg = new message(document.getElementById( "username" ).value,document.getElementById( "message" ).value);
+	//console.log( msg );
 	socket.emit( 'message', msg );
 }
 
@@ -27,9 +27,16 @@ function DisConnect() {
 	socket.send(socket.socket.sessionid + " has been disconected.");
 	socket.disconnect();
 }
+
+function message(name,msg){
+	this.name = name;
+	this.msg = msg
+}
+
 </script>
 <h1>socket.io</h1>
 <div id="connectId"></div>
+<input type="text" id="username" value="">
 <input type="text" id="message" value="">
 <input type="button" value="send" onclick="SendMsg()">
 <input type="button" value="disconect" onclick="DisConnect()">
