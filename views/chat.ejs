@@ -13,7 +13,7 @@ socket.on( 'connect', function(msg) {
 	document.getElementById( "connectId" ).innerHTML = "your ID::" + socket.socket.sessionid;
 	can = document.getElementById('can');
 	ctx = can.getContext('2d');
-	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.fillStyle = 'rgb(255,255,255)';
 	ctx.fillRect(0,0,300,300);
 	ctx.beginPath();
 	ctx.moveTo(0, 0);
