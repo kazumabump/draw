@@ -21,17 +21,17 @@ socket.on( 'connect', function(msg) {
 // when receive a message
 socket.on( 'message', function(msg) {
 	
-	var elem = document.create.Element("div");
+	//var elem = document.create.Element("div");
 	
-	elem.appendChild(document.createTextNode(msg.name + ":")):
-	elem.appendChild(document.createTextNode(msg.msg));
-	elem.appendChild(document.createElement( "br" ));
+	//elem.appendChild(document.createTextNode(msg.name + ":")):
+	//elem.appendChild(document.createTextNode(msg.msg));
+	//elem.appendChild(document.createElement( "br" ));
 
-	document.getElementById("receiveMsg").insertBefore(elem,document.getElementById("receiveMsg").firstChild);
+	//document.getElementById("receiveMsg").insertBefore(elem,document.getElementById("receiveMsg").firstChild);
 	
-	//document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.name + ":"),document.getElementById("receiveMsg").firstChild);
-	//document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.msg  ),document.getElementById("receiveMsg").firstChild);
-	//document.getElementById( "receiveMsg" ).insertBefore( document.createElement( "br" ),document.getElementById("receiveMsg").firstChild);
+	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.name + ":"),document.getElementById("receiveMsg").firstChild);
+	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.msg  ),document.getElementById("receiveMsg").firstChild);
+	document.getElementById( "receiveMsg" ).insertBefore( document.createElement( "br" ),document.getElementById("receiveMsg").firstChild);
 });
 
 // message sending
