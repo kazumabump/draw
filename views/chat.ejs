@@ -29,11 +29,11 @@ socket.on( 'message', function(msg) {
 
 	//document.getElementById("receiveMsg").insertBefore(elem,document.getElementById("receiveMsg").firstChild);
 
-	var elem = document.getElementById("receiveMsg").firstChild;
+	//var elem = document.getElementById("receiveMsg").firstChild;
 	
-	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.name + ":"),elem);
-	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.msg  ),elem);
-	document.getElementById( "receiveMsg" ).insertBefore( document.createElement( "br" ),elem);
+	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.name + ":"),document.getElementById("receiveMsg").firstChild;
+	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.msg  ),document.getElementById("receiveMsg").firstChild);
+	document.getElementById( "receiveMsg" ).insertBefore( document.createElement( "br" ),document.getElementById("receiveMsg").firstChild);
 });
 
 // message sending
