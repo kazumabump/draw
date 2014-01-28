@@ -1,46 +1,118 @@
 <h1>socket.io</h1>
 <canvas width="300" height="300" id="can"></canvas>
+<br>
+<input type="button" value="3px" onclick="rad=3;">
+<input type="button" value="5px" onclick="rad=5;">
+<input type="button" value="10px" onclick="rad=10;">
+<br>
+<canvas width="30" height="30" id="pallet1" onclick="currentcolor=red;"></canvas>
+<canvas width="30" height="30" id="pallet2" onclick="currentcolor=green;"></canvas>
+<canvas width="30" height="30" id="pallet3" onclick="currentcolor=blue;"></canvas>
+<canvas width="30" height="30" id="pallet4" onclick="currentcolor=black;"></canvas>
+<canvas width="30" height="30" id="pallet5" onclick="currentcolor=white;"></canvas>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 
 // connect to server
 var socket = io.connect();
-var can,ctx;
+var can,ctx,pallet,palletctx;
+var mouse_condition = false;
+var rad = 5;
+var currentcolor = "#000000";
+var red		= "#FF0000",
+    green	= "#00FF00",
+	blue	= "#0000FF",
+	black	= "#000000",
+	white	= "#FFFFFF";
+can = document.getElementById('can');
+ctx = can.getContext('2d');
 
 
 // when connected
 socket.on( 'connect', function(msg) {
 	document.getElementById( "connectId" ).innerHTML = "your ID::" + socket.socket.sessionid;
-	can = document.getElementById('can');
-	ctx = can.getContext('2d');
 	ctx.fillStyle = 'rgb(255,255,255)';
 	ctx.fillRect(0,0,300,300);
-	ctx.beginPath();
+
+	//pallet
+	pallet = document.getElementById('pallet1');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = red;
+	palletctx.fillRect(0,0,30,30);
+	pallet = document.getElementById('pallet2');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = green;
+	palletctx.fillRect(0,0,30,30);
+	pallet = document.getElementById('pallet3');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = blue;
+	palletctx.fillRect(0,0,30,30);
+	pallet = document.getElementById('pallet4');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = black;
+	palletctx.fillRect(0,0,30,30);
+	pallet = document.getElementById('pallet5');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = white;
+	palletctx.fillRect(0,0,30,30);
+	
 });
 
 // when receive a message
 socket.on( 'message', function(msg) {
+	var div = document.createElement("div");
+	var DD = new Date();
+	var canvas;
+	var newctx;
+	var image;
+	var str = String(msg.pic);
+	var strarray = str.split(",")
 	
-	//var elem = document.create.Element("div");
-	
-	//elem.appendChild(document.createTextNode(msg.name + ":")):
-	//elem.appendChild(document.createTextNode(msg.msg));
-	//elem.appendChild(document.createElement( "br" ));
+	if(msg != null){
+		canvas = document.createElement("canvas");
+		canvas.width = 300;
+		canvas.height = 300;
+		newctx = canvas.getContext('2d');
+		image = newctx.createImageData(300,300);
+		for(var i=0;i<300*300*4;i++){
+			var tmp = strarray[i].split(":");
+			image.data[i] = tmp[1];
+		}
+		newctx.putImageData(image,0,0);
+	}
 
-	//document.getElementById("receiveMsg").insertBefore(elem,document.getElementById("receiveMsg").firstChild);
+	div.appendChild(document.createTextNode("Name: " + msg.name + "     "));
+	div.appendChild(document.createTextNode(DD.getFullYear() + "/" + DD.getMonth()+1 + "/" + DD.getDate() + "  " + DD.getHours() + ":" + DD.getMinutes() + ":" + DD.getSeconds()));
+	div.appendChild(document.createTextNode("     ID: " + msg.id));
+	div.appendChild(document.createElement( "br" ));
+	div.appendChild(document.createElement( "br" ));
+	div.appendChild(document.createTextNode(msg.msg));
+	div.appendChild(document.createElement( "br" ));
+	div.appendChild(document.createElement( "br" ));
 
-	//var elem = document.getElementById("receiveMsg").firstChild;
-	
-	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.name + ":"),document.getElementById("receiveMsg").firstChild;
-	document.getElementById( "receiveMsg" ).insertBefore( document.createTextNode( msg.msg  ),document.getElementById("receiveMsg").firstChild);
-	document.getElementById( "receiveMsg" ).insertBefore( document.createElement( "br" ),document.getElementById("receiveMsg").firstChild);
+	if(msg.pic != null){
+		div.appendChild(canvas);
+		div.appendChild(document.createElement( "br" ));
+		div.appendChild(document.createElement( "br" ));
+	}
+
+	document.getElementById("receiveMsg").insertBefore(div,document.getElementById("receiveMsg").firstChild);
+
 });
 
 // message sending
 function SendMsg() {
-	var msg = new message(document.getElementById( "username" ).value,document.getElementById( "message" ).value);
+	var msg = new message(document.getElementById( "username" ).value,document.getElementById( "message" ).value,socket.socket.sessionid,null);
 	//console.log( msg );
 	socket.emit( 'message', msg );
+}
+// picture sending
+function SendPic() {
+	var msg = new message(document.getElementById( "username" ).value,document.getElementById( "message" ).value,socket.socket.sessionid,ctx.getImageData(0,0,300,300));
+	//console.log( msg );
+	socket.emit( 'message', msg );
+	ctx.fillStyle = 'rgb(255,255,255)';
+	ctx.fillRect(0,0,300,300);
 }
 
 // disconect
@@ -49,15 +121,41 @@ function DisConnect() {
 	socket.disconnect();
 }
 
-function message(name,msg){
+function message(name,msg,id,pic){
 	this.name = name;
-	this.msg = msg
+	this.msg = msg;
+	this.id = id;
+	this.pic = JSON.stringify(pic.data);
 }
+window.addEventListener( 'load', function() {
+	
+	can.addEventListener( 'mousemove', function(e) {
+		if( mouse_condition) {
+			var rect = e.target.getBoundingClientRect();
+			var mex = e.clientX - rect.left;
+			var mey = e.clientY - rect.top;
+			ctx.fillStyle = currentcolor;
+			ctx.beginPath();
+			ctx.arc( mex, mey, rad, 0, Math.PI*2, false );
+			ctx.fill();
+		}
+	});
 
+	can.addEventListener( 'mousedown', function(e) {
+		mouse_condition = true;
+	});
+
+	can.addEventListener( 'mouseup', function(e) {
+		mouse_condition = false;
+		//console.log( ">>>" + msg );
+	});
+});
 </script>
 <div id="connectId"></div>
 <input type="text" id="username" value="">
-<input type="text" id="message" value="">
+<br>
+<textarea id="message" cols="100" rows="6" value=""></textarea>
 <input type="button" value="send" onclick="SendMsg()">
+<input type="button" value="sendpicture" onclick="SendPic()">
 <input type="button" value="disconect" onclick="DisConnect()">
 <div id="receiveMsg"></div>
