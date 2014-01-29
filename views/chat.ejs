@@ -1,15 +1,21 @@
 <h1>socket.io</h1>
 <canvas width="300" height="300" id="can"></canvas>
+<canvas width="30" height="30" id="pallet"></canvas>
 <br>
 <input type="button" value="3px" onclick="rad=3;">
 <input type="button" value="5px" onclick="rad=5;">
 <input type="button" value="10px" onclick="rad=10;">
+<input type="button" value="15px" onclick="rad=15;">
+<input type="button" value="clear" onclick="ctx.fillStyle = currentcolor;ctx.fillRect(0,0,300,300);">
 <br>
-<canvas width="30" height="30" id="pallet1" onclick="currentcolor=red;"></canvas>
-<canvas width="30" height="30" id="pallet2" onclick="currentcolor=green;"></canvas>
-<canvas width="30" height="30" id="pallet3" onclick="currentcolor=blue;"></canvas>
-<canvas width="30" height="30" id="pallet4" onclick="currentcolor=black;"></canvas>
-<canvas width="30" height="30" id="pallet5" onclick="currentcolor=white;"></canvas>
+<canvas width="30" height="30" id="pallet1" onclick="currentcolor=white;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
+<canvas width="30" height="30" id="pallet2" onclick="currentcolor=black;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
+<canvas width="30" height="30" id="pallet3" onclick="currentcolor=red;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
+<canvas width="30" height="30" id="pallet4" onclick="currentcolor=green;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
+<canvas width="30" height="30" id="pallet5" onclick="currentcolor=blue;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
+<canvas width="30" height="30" id="pallet6" onclick="currentcolor=yellow;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
+<canvas width="30" height="30" id="pallet7" onclick="currentcolor=cyan;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
+<canvas width="30" height="30" id="pallet8" onclick="currentcolor=magenta;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 
@@ -18,12 +24,16 @@ var socket = io.connect();
 var can,ctx,pallet,palletctx;
 var mouse_condition = false;
 var rad = 5;
+var messagecount = 1;
 var currentcolor = "#000000";
 var red		= "#FF0000",
     green	= "#00FF00",
 	blue	= "#0000FF",
 	black	= "#000000",
-	white	= "#FFFFFF";
+	white	= "#FFFFFF",
+	yellow	= "#FFFF00",
+	cyan	= "#00FFFF",
+	magenta	= "#FF00FF";
 can = document.getElementById('can');
 ctx = can.getContext('2d');
 
@@ -37,25 +47,40 @@ socket.on( 'connect', function(msg) {
 	//pallet
 	pallet = document.getElementById('pallet1');
 	palletctx = pallet.getContext('2d');
-	palletctx.fillStyle = red;
+	palletctx.fillStyle = white;
 	palletctx.fillRect(0,0,30,30);
 	pallet = document.getElementById('pallet2');
 	palletctx = pallet.getContext('2d');
-	palletctx.fillStyle = green;
+	palletctx.fillStyle = black;
 	palletctx.fillRect(0,0,30,30);
 	pallet = document.getElementById('pallet3');
 	palletctx = pallet.getContext('2d');
-	palletctx.fillStyle = blue;
+	palletctx.fillStyle = red;
 	palletctx.fillRect(0,0,30,30);
 	pallet = document.getElementById('pallet4');
 	palletctx = pallet.getContext('2d');
-	palletctx.fillStyle = black;
+	palletctx.fillStyle = green;
 	palletctx.fillRect(0,0,30,30);
 	pallet = document.getElementById('pallet5');
 	palletctx = pallet.getContext('2d');
-	palletctx.fillStyle = white;
+	palletctx.fillStyle = blue;
 	palletctx.fillRect(0,0,30,30);
-	
+	pallet = document.getElementById('pallet6');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = yellow;
+	palletctx.fillRect(0,0,30,30);
+	pallet = document.getElementById('pallet7');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = cyan;
+	palletctx.fillRect(0,0,30,30);
+	pallet = document.getElementById('pallet8');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = magenta;
+	palletctx.fillRect(0,0,30,30);
+	pallet = document.getElementById('pallet');
+	palletctx = pallet.getContext('2d');
+	palletctx.fillStyle = currentcolor;
+	palletctx.fillRect(0,0,30,30);
 });
 
 // when receive a message
@@ -68,7 +93,7 @@ socket.on( 'message', function(msg) {
 	var str = String(msg.pic);
 	var strarray = str.split(",")
 	
-	if(msg != null){
+	if(msg.pic != null){
 		canvas = document.createElement("canvas");
 		canvas.width = 300;
 		canvas.height = 300;
@@ -81,7 +106,9 @@ socket.on( 'message', function(msg) {
 		newctx.putImageData(image,0,0);
 	}
 
-	div.appendChild(document.createTextNode("Name: " + msg.name + "     "));
+	div.appendChild(document.createTextNode(messagecount + ": "));
+	messagecount++;
+	div.appendChild(document.createTextNode(msg.name + "     "));
 	div.appendChild(document.createTextNode(DD.getFullYear() + "/" + DD.getMonth()+1 + "/" + DD.getDate() + "  " + DD.getHours() + ":" + DD.getMinutes() + ":" + DD.getSeconds()));
 	div.appendChild(document.createTextNode("     ID: " + msg.id));
 	div.appendChild(document.createElement( "br" ));
@@ -103,7 +130,7 @@ socket.on( 'message', function(msg) {
 // message sending
 function SendMsg() {
 	var msg = new message(document.getElementById( "username" ).value,document.getElementById( "message" ).value,socket.socket.sessionid,null);
-	//console.log( msg );
+	console.log( msg );
 	socket.emit( 'message', msg );
 }
 // picture sending
@@ -125,7 +152,10 @@ function message(name,msg,id,pic){
 	this.name = name;
 	this.msg = msg;
 	this.id = id;
-	this.pic = JSON.stringify(pic.data);
+	if(pic != null)
+		this.pic = JSON.stringify(pic.data);
+	else
+		this.pic = null;
 }
 window.addEventListener( 'load', function() {
 	
@@ -143,6 +173,13 @@ window.addEventListener( 'load', function() {
 
 	can.addEventListener( 'mousedown', function(e) {
 		mouse_condition = true;
+		var rect = e.target.getBoundingClientRect();
+		var mex = e.clientX - rect.left;
+		var mey = e.clientY - rect.top;
+		ctx.fillStyle = currentcolor;
+		ctx.beginPath();
+		ctx.arc( mex, mey, rad, 0, Math.PI*2, false );
+		ctx.fill();
 	});
 
 	can.addEventListener( 'mouseup', function(e) {
@@ -152,7 +189,7 @@ window.addEventListener( 'load', function() {
 });
 </script>
 <div id="connectId"></div>
-<input type="text" id="username" value="">
+<input type="text" id="username" value="name">
 <br>
 <textarea id="message" cols="100" rows="6" value=""></textarea>
 <input type="button" value="send" onclick="SendMsg()">
