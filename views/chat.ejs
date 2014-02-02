@@ -1,12 +1,13 @@
-<h1>socket.io</h1>
-<canvas width="300" height="300" id="can"></canvas>
-<canvas width="30" height="30" id="pallet"></canvas>
+﻿<h1>socket.io</h1>
+<canvas width="300" height="300" id="can"></canvas>	<!--メインキャンバス-->
+<canvas width="30" height="30" id="pallet"></canvas><!--選択中のカラー-->
+<input type="text" readonly="readonly" value=" 5px" size="3" id="px"></input><!--ペンの太さ表示-->
 <br>
-<input type="button" value="3px" onclick="rad=3;">
-<input type="button" value="5px" onclick="rad=5;">
-<input type="button" value="10px" onclick="rad=10;">
-<input type="button" value="15px" onclick="rad=15;">
-<input type="button" value="clear" onclick="ctx.fillStyle = currentcolor;ctx.fillRect(0,0,300,300);">
+<input type="button" value="3px" onclick="rad=3;document.getElementById('px').value=' 3px';">	<!--ペンの太さ変更3px-->
+<input type="button" value="5px" onclick="rad=5;document.getElementById('px').value=' 5px';">	<!--ペンの太さ変更5px-->
+<input type="button" value="10px" onclick="rad=10;document.getElementById('px').value='10px';">	<!--ペンの太さ変更10px-->
+<input type="button" value="15px" onclick="rad=15;document.getElementById('px').value='15px';">	<!--ペンの太さ変更15px-->
+<input type="button" value="clear" onclick="ctx.fillStyle = currentcolor;ctx.fillRect(0,0,300,300);">	<!--選択中の色でキャンバスをクリア-->
 <br>
 <canvas width="30" height="30" id="pallet1" onclick="currentcolor=white;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
 <canvas width="30" height="30" id="pallet2" onclick="currentcolor=black;palletctx.fillStyle = currentcolor;palletctx.fillRect(0,0,30,30);"></canvas>
@@ -22,20 +23,22 @@
 // connect to server
 var socket = io.connect();
 var can,ctx,pallet,palletctx;
-var mouse_condition = false;
-var rad = 5;
-var messagecount = 1;
-var currentcolor = "#000000";
-var red		= "#FF0000",
-    green	= "#00FF00",
-	blue	= "#0000FF",
-	black	= "#000000",
-	white	= "#FFFFFF",
-	yellow	= "#FFFF00",
-	cyan	= "#00FFFF",
-	magenta	= "#FF00FF";
+var mouse_condition = false;	//マウスのクリック状態
+var rad = 5;					//ペンの太さ
+var messagecount = 1;			//メッセージ数
+var currentcolor = "#000000";	//初期カラー
+var red		= "#FF0000",		//赤
+    green	= "#00FF00",		//緑
+	blue	= "#0000FF",		//青
+	black	= "#000000",		//黒
+	white	= "#FFFFFF",		//白
+	yellow	= "#FFFF00",		//黄色
+	cyan	= "#00FFFF",		//シアン
+	magenta	= "#FF00FF";		//マゼンタ
+
 can = document.getElementById('can');
 ctx = can.getContext('2d');
+document.getElementById("px").value=" 5px";
 
 
 // when connected
@@ -44,39 +47,48 @@ socket.on( 'connect', function(msg) {
 	ctx.fillStyle = 'rgb(255,255,255)';
 	ctx.fillRect(0,0,300,300);
 
-	//pallet
+	//パレットの描画
+	/*白パレット*/
 	pallet = document.getElementById('pallet1');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = white;
 	palletctx.fillRect(0,0,30,30);
+	/*黒パレット*/
 	pallet = document.getElementById('pallet2');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = black;
 	palletctx.fillRect(0,0,30,30);
+	/*赤パレット*/
 	pallet = document.getElementById('pallet3');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = red;
 	palletctx.fillRect(0,0,30,30);
+	/*緑パレット*/
 	pallet = document.getElementById('pallet4');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = green;
 	palletctx.fillRect(0,0,30,30);
+	/*青パレット*/
 	pallet = document.getElementById('pallet5');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = blue;
 	palletctx.fillRect(0,0,30,30);
+	/*黄パレット*/
 	pallet = document.getElementById('pallet6');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = yellow;
 	palletctx.fillRect(0,0,30,30);
+	/*シアンパレット*/
 	pallet = document.getElementById('pallet7');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = cyan;
 	palletctx.fillRect(0,0,30,30);
+	/*マゼンタパレット*/
 	pallet = document.getElementById('pallet8');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = magenta;
 	palletctx.fillRect(0,0,30,30);
+	/*選択中のカラーパレット*/
 	pallet = document.getElementById('pallet');
 	palletctx = pallet.getContext('2d');
 	palletctx.fillStyle = currentcolor;
@@ -184,7 +196,6 @@ window.addEventListener( 'load', function() {
 
 	can.addEventListener( 'mouseup', function(e) {
 		mouse_condition = false;
-		//console.log( ">>>" + msg );
 	});
 });
 </script>
